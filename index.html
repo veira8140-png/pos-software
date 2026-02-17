@@ -13,7 +13,6 @@
           -webkit-font-smoothing: antialiased;
         }
         
-        /* 3D Soft Shadow Utility */
         .shadow-3d {
           box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
@@ -23,31 +22,37 @@
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Printing Engine */
+        /* Default Screen View: Hide the print-specific container */
+        #print-section {
+            display: none;
+        }
+
+        /* Printing Engine: The only thing visible during print is the #print-section */
         @media print {
             body * {
                 visibility: hidden !important;
             }
-            .print-only, .print-only * {
+            #print-section, #print-section * {
                 visibility: visible !important;
             }
-            .print-only {
+            #print-section {
+                display: block !important;
                 position: absolute !important;
                 left: 0 !important;
                 top: 0 !important;
                 width: 100% !important;
-                display: block !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                z-index: 9999 !important;
+                background-color: white !important;
             }
-            /* Remove standard browser headers/footers */
+            /* Hide standard browser headers/footers */
             @page {
                 margin: 0;
                 size: auto;
             }
         }
 
-        /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>

@@ -10,76 +10,105 @@ interface ReceiptProps {
 const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
   const dateStr = new Date(sale.timestamp).toLocaleString('en-KE');
 
+  // Styles defined here for thermal printing consistency
+  const containerStyle: React.CSSProperties = {
+    fontFamily: 'Courier, monospace',
+    width: '100%',
+    maxWidth: '300px',
+    margin: '0 auto',
+    padding: '10px',
+    color: '#000',
+    fontSize: '12px',
+    lineHeight: '1.2'
+  };
+
+  const headerStyle: React.CSSProperties = {
+    textAlign: 'center',
+    marginBottom: '15px'
+  };
+
+  const dividerStyle: React.CSSProperties = {
+    borderTop: '1px dashed #000',
+    margin: '8px 0'
+  };
+
   return (
-    <div className="bg-white p-4 sm:p-8 max-w-[320px] mx-auto text-[12px] font-mono leading-tight print:p-0 print:max-w-none print:w-full">
-      <div className="text-center mb-4 space-y-1">
-        <h2 className="text-lg font-bold uppercase">{business.name}</h2>
-        <p>{business.address}</p>
-        <p>PIN: {business.kraPin}</p>
-        <p>Tel: {business.whatsappNumber}</p>
+    <div style={containerStyle}>
+      <div style={headerStyle}>
+        <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>{business.name.toUpperCase()}</div>
+        <div style={{ fontSize: '10px' }}>{business.address}</div>
+        <div style={{ fontSize: '10px' }}>PIN: {business.kraPin}</div>
+        <div style={{ fontSize: '10px' }}>TEL: {business.whatsappNumber}</div>
       </div>
 
-      <div className="border-t border-b border-dashed border-gray-400 py-2 my-2 space-y-1">
-        <div className="flex justify-between">
-          <span>Date:</span>
-          <span>{dateStr}</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Staff:</span>
-          <span>{sale.staffName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span>TXN ID:</span>
-          <span className="font-bold">{sale.id.toUpperCase()}</span>
-        </div>
+      <div style={dividerStyle} />
+      
+      <div style={{ fontSize: '10px', display: 'flex', justifyContent: 'space-between' }}>
+        <span>DATE:</span>
+        <span>{dateStr}</span>
+      </div>
+      <div style={{ fontSize: '10px', display: 'flex', justifyContent: 'space-between' }}>
+        <span>STAFF:</span>
+        <span>{sale.staffName.toUpperCase()}</span>
+      </div>
+      <div style={{ fontSize: '10px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
+        <span>TXN NO:</span>
+        <span>#{sale.id}</span>
       </div>
 
-      <div className="space-y-1 mb-4">
-        <div className="flex font-bold border-b border-gray-200 pb-1 mb-1">
-          <span className="flex-1">Description</span>
-          <span className="w-10 text-center">Qty</span>
-          <span className="w-20 text-right">Amount</span>
-        </div>
-        {sale.items.map((item, idx) => (
-          <div key={idx} className="flex">
-            <span className="flex-1 truncate pr-2">{item.name}</span>
-            <span className="w-10 text-center">{item.quantity}</span>
-            <span className="w-20 text-right">{item.total.toLocaleString()}</span>
-          </div>
-        ))}
+      <div style={dividerStyle} />
+
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
+        <thead>
+          <tr style={{ borderBottom: '1px solid #000' }}>
+            <th style={{ textAlign: 'left', paddingBottom: '4px' }}>ITEM</th>
+            <th style={{ textAlign: 'center', paddingBottom: '4px' }}>QTY</th>
+            <th style={{ textAlign: 'right', paddingBottom: '4px' }}>VAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sale.items.map((item, idx) => (
+            <tr key={idx}>
+              <td style={{ paddingTop: '4px' }}>{item.name.toUpperCase()}</td>
+              <td style={{ textAlign: 'center', paddingTop: '4px' }}>{item.quantity}</td>
+              <td style={{ textAlign: 'right', paddingTop: '4px' }}>{item.total.toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div style={dividerStyle} />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px' }}>
+        <span>SUBTOTAL:</span>
+        <span>{(sale.total - sale.tax).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px' }}>
+        <span>VAT (16%):</span>
+        <span>{sale.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '14px', marginTop: '4px' }}>
+        <span>TOTAL:</span>
+        <span>KES {sale.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
       </div>
 
-      <div className="border-t border-dashed border-gray-400 pt-2 space-y-1">
-        <div className="flex justify-between">
-          <span>Subtotal</span>
-          <span>{(sale.total - sale.tax).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+      <div style={dividerStyle} />
+
+      <div style={{ fontSize: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>METHOD:</span>
+          <span>{sale.paymentMethod.toUpperCase()}</span>
         </div>
-        <div className="flex justify-between">
-          <span>VAT (16%)</span>
-          <span>{sale.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-        </div>
-        <div className="flex justify-between font-bold text-base pt-1 border-t border-gray-200 mt-1">
-          <span>TOTAL KES</span>
-          <span>{sale.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-        </div>
+        <div style={{ marginTop: '10px', fontWeight: 'bold' }}>E-TIMS CTRL:</div>
+        <div style={{ fontSize: '9px', wordBreak: 'break-all' }}>{sale.etimsControlNumber}</div>
       </div>
 
-      <div className="mt-4 text-[10px] space-y-1">
-        <div className="flex justify-between">
-          <span>Payment Mode:</span>
-          <span className="font-bold">{sale.paymentMethod}</span>
+      <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '10px' }}>
+        <div style={{ width: '100px', height: '100px', margin: '0 auto 10px', border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ fontSize: '8px' }}>E-TIMS QR CODE</span>
         </div>
-        <p className="font-bold pt-1">E-TIMS Control Number:</p>
-        <p className="break-all">{sale.etimsControlNumber}</p>
-      </div>
-
-      <div className="mt-6 text-center text-[10px] space-y-2">
-        <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center border border-gray-200 print:border-black">
-            <span className="text-[8px] text-gray-400 print:text-black">KRA E-TIMS QR</span>
-        </div>
-        <p className="font-bold">Thank you for your business!</p>
-        <p>Software by Veira POS</p>
-        <p className="pt-2 text-[8px] opacity-50 italic">Issued subject to KRA regulations</p>
+        <div style={{ fontWeight: 'bold' }}>THANK YOU FOR SHOPPING!</div>
+        <div style={{ fontSize: '8px', color: '#666' }}>Powered by Veira POS</div>
       </div>
     </div>
   );
