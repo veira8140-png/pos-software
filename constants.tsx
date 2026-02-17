@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Sale } from './types';
+import { Sale, Staff } from './types';
 
 export const VAT_RATE = 0.16;
 
@@ -55,9 +55,10 @@ export const INITIAL_PRODUCTS = [
   },
 ];
 
-export const MOCK_STAFF = [
-  { id: 's1', name: 'Admin User', pin: '1234', role: 'admin' },
+export const MOCK_STAFF: Staff[] = [
+  { id: 's1', name: 'John Doe', pin: '1234', role: 'owner' },
   { id: 's2', name: 'Mercy W.', pin: '0000', role: 'cashier' },
+  { id: 's3', name: 'Peter K.', pin: '1111', role: 'manager' },
 ];
 
 export const CATEGORIES = ['Dairy', 'Bakery', 'Groceries', 'Beverages', 'Electronics', 'Personal Care'];
@@ -94,7 +95,7 @@ export const MOCK_SALES: Sale[] = [
     tax: 660 * (0.16 / 1.16),
     paymentMethod: 'M-Pesa',
     staffId: 's1',
-    staffName: 'Admin User',
+    staffName: 'John Doe',
     etimsControlNumber: 'KRA-TXN892-105',
     status: 'active'
   },

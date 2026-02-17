@@ -128,19 +128,6 @@ const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
           <span>{sale.paymentMethod.toUpperCase()}</span>
         </div>
         
-        {sale.paymentMethod === 'Split' && sale.paymentDetails && (
-          <div style={{ fontSize: '9px', marginLeft: '10px', color: '#333' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span> - CASH:</span>
-              <span>{sale.paymentDetails.cash.toLocaleString()}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span> - M-PESA:</span>
-              <span>{sale.paymentDetails.mpesa.toLocaleString()}</span>
-            </div>
-          </div>
-        )}
-
         <div style={{ marginTop: '10px', fontWeight: 'bold' }}>E-TIMS CTRL:</div>
         <div style={{ fontSize: '9px', wordBreak: 'break-all' }}>{sale.etimsControlNumber}</div>
       </div>

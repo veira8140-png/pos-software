@@ -9,11 +9,13 @@ export interface Product {
   image: string;
 }
 
+export type StaffRole = 'owner' | 'manager' | 'accountant' | 'auditor' | 'cashier';
+
 export interface Staff {
   id: string;
   name: string;
   pin: string;
-  role: 'admin' | 'cashier';
+  role: StaffRole;
 }
 
 export interface SaleItem {
@@ -38,11 +40,7 @@ export interface Sale {
     value: number;
   };
   tax: number; // 16% VAT on discounted total
-  paymentMethod: 'Cash' | 'M-Pesa' | 'Split';
-  paymentDetails?: {
-    cash: number;
-    mpesa: number;
-  };
+  paymentMethod: 'Cash' | 'M-Pesa' | 'Card';
   staffId: string;
   staffName: string;
   etimsControlNumber: string;

@@ -8,23 +8,28 @@ import {
   LogOut, 
   BarChart3
 } from 'lucide-react';
+import { StaffRole } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
   activeTab: string;
   setActiveTab: (tab: string) => void;
   staffName: string;
+  staffRole: StaffRole;
   onLogout: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staffName, onLogout }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staffName, staffRole, onLogout }) => {
+  // Access Control Matrix
   const navItems = [
-    { id: 'sales', icon: ShoppingBag, label: 'Sell' },
-    { id: 'products', icon: Package, label: 'Items' },
-    { id: 'staff', icon: Users, label: 'Team' },
-    { id: 'receipts', icon: Receipt, label: 'History' },
-    { id: 'reports', icon: BarChart3, label: 'Stats' },
+    { id: 'sales', icon: ShoppingBag, label: 'Sell', roles: ['owner', 'manager', 'cashier'] },
+    { id: 'products', icon: Package, label: 'Items', roles: ['owner', 'manager', 'accountant', 'auditor'] },
+    { id: 'staff', icon: Users, label: 'Team', roles: ['owner', 'manager'] },
+    { id: 'receipts', icon: Receipt, label: 'History', roles: ['owner', 'manager', 'accountant', 'auditor', 'cashier'] },
+    { id: 'reports', icon: BarChart3, label: 'Stats', roles: ['owner', 'manager', 'accountant', 'auditor'] },
   ];
+
+  const visibleNavItems = navItems.filter(item => item.roles.includes(staffRole));
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-[#F8FAFC] overflow-hidden">
@@ -36,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staf
         </div>
 
         <nav className="flex-1 space-y-2">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
@@ -56,6 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staf
           <div className="bg-slate-50 p-5 rounded-2xl mb-4 border border-slate-100">
             <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Signed in as</p>
             <p className="font-bold text-slate-900 truncate text-sm">{staffName}</p>
+            <p className="text-[9px] font-black uppercase text-indigo-500 mt-1">{staffRole}</p>
           </div>
           <button onClick={onLogout} className="w-full flex items-center justify-center gap-2 py-4 text-red-500 font-bold hover:bg-red-50 rounded-2xl transition-colors">
             <LogOut size={16} />
@@ -71,7 +77,10 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staf
           <span className="font-black text-lg tracking-tighter">Veira</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[9px] font-black uppercase text-indigo-600 bg-indigo-50 px-2.5 py-1.5 rounded-lg max-w-[80px] truncate">{staffName.split(' ')[0]}</span>
+          <div className="text-right flex flex-col items-end">
+            <span className="text-[9px] font-black uppercase text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg truncate">{staffName.split(' ')[0]}</span>
+            <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{staffRole}</span>
+          </div>
           <button onClick={onLogout} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
             <LogOut size={20} />
           </button>
@@ -85,9 +94,9 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, staf
         </div>
       </main>
 
-      {/* Mobile Bottom Dock - Optimized for all iPhone/Android widths */}
+      {/* Mobile Bottom Dock */}
       <nav className="lg:hidden fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-xl border border-slate-200/50 rounded-[32px] px-2 py-2.5 flex justify-around items-center z-[120] no-print shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] ring-1 ring-black/5">
-        {navItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
