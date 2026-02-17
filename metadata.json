@@ -1,0 +1,5 @@
+{
+  "name": "Veira POS",
+  "description": "A robust, desktop-first retail POS system for Kenyan businesses featuring M-Pesa integration, E-TIMS compliant receipts, and AI-powered WhatsApp summaries.",
+  "requestFramePermissions": []
+}
