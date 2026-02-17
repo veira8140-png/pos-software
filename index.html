@@ -3,58 +3,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veira POS - Retail Simplified</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Veira - Easy POS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { 
           font-family: 'Plus Jakarta Sans', sans-serif; 
-          -webkit-font-smoothing: antialiased;
+          background-color: #F8FAFC;
+          color: #0F172A;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
         }
         
-        .shadow-3d {
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .shadow-3d-hover:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
+        .card-shadow {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
-        /* Default Screen View: Hide the print-specific container */
-        #print-section {
-            display: none;
+        .dock-shadow {
+          box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.05);
         }
 
-        /* Printing Engine: The only thing visible during print is the #print-section */
+        .active-tab {
+          background-color: #4F46E5;
+          color: white;
+          box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        #print-section { display: none; }
+
         @media print {
-            body * {
-                visibility: hidden !important;
-            }
-            #print-section, #print-section * {
-                visibility: visible !important;
-            }
-            #print-section {
-                display: block !important;
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                z-index: 9999 !important;
-                background-color: white !important;
-            }
-            /* Hide standard browser headers/footers */
-            @page {
-                margin: 0;
-                size: auto;
-            }
+            body * { visibility: hidden !important; }
+            #print-section, #print-section * { visibility: visible !important; }
+            #print-section { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        input, select {
+            outline: none;
+            border: 1px solid #E2E8F0;
+        }
+        
+        input:focus {
+            border-color: #6366F1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
     </style>
 <script type="importmap">
 {
@@ -68,7 +62,7 @@
 }
 </script>
 </head>
-<body class="bg-[#F8F9FC] text-[#1A1C1E]">
+<body>
     <div id="root"></div>
 </body>
 </html>
