@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Veira - Easy POS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -14,40 +16,49 @@
           color: #0F172A;
           user-select: none;
           -webkit-tap-highlight-color: transparent;
+          overflow-x: hidden;
         }
         
-        .card-shadow {
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        }
-
-        .dock-shadow {
-          box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        .active-tab {
-          background-color: #4F46E5;
-          color: white;
-          box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-        }
-
-        #print-section { display: none; }
-
-        @media print {
-            body * { visibility: hidden !important; }
-            #print-section, #print-section * { visibility: visible !important; }
-            #print-section { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+        /* Modern scrollbar for desktop */
+        @media (min-width: 1024px) {
+          ::-webkit-scrollbar { width: 8px; }
+          ::-webkit-scrollbar-track { background: #f1f1f1; }
+          ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+          ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        input, select {
-            outline: none;
-            border: 1px solid #E2E8F0;
+        #print-section { display: none; }
+
+        @media print {
+            @page {
+                margin: 0; /* This removes the browser's default header (title/date) and footer */
+            }
+            body * { visibility: hidden !important; }
+            #print-section, #print-section * { visibility: visible !important; }
+            #print-section { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                padding: 20px; /* Add some padding since margins are removed */
+            }
         }
+
+        /* Prevent content from being hidden behind mobile nav */
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 24px); }
         
-        input:focus {
-            border-color: #6366F1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        /* Touch friendly focus states */
+        input:focus, select:focus, button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Prevent text zoom on focus in iOS */
+        @media screen and (max-width: 768px) {
+            input, select, textarea { font-size: 16px !important; }
         }
     </style>
 <script type="importmap">

@@ -6,6 +6,7 @@ export interface Product {
   category: string;
   stock: number;
   sku?: string;
+  image: string;
 }
 
 export interface Staff {
@@ -23,16 +24,37 @@ export interface SaleItem {
   total: number;
 }
 
+export type DiscountType = 'Fixed' | 'Percentage';
+
 export interface Sale {
   id: string;
   timestamp: number;
   items: SaleItem[];
   total: number;
-  tax: number; // 16% VAT
-  paymentMethod: 'Cash' | 'M-Pesa';
+  subtotal: number;
+  discount: number; // Final calculated discount value in KES
+  discountConfig?: {
+    type: DiscountType;
+    value: number;
+  };
+  tax: number; // 16% VAT on discounted total
+  paymentMethod: 'Cash' | 'M-Pesa' | 'Split';
+  paymentDetails?: {
+    cash: number;
+    mpesa: number;
+  };
   staffId: string;
   staffName: string;
   etimsControlNumber: string;
+  status: 'active' | 'voided';
+}
+
+export interface ActivityLog {
+  id: string;
+  timestamp: number;
+  staffName: string;
+  action: string;
+  details: string;
 }
 
 export interface BusinessConfig {
@@ -49,5 +71,6 @@ export interface AppState {
   staff: Staff[];
   products: Product[];
   sales: Sale[];
+  logs: ActivityLog[];
   currentStaff: Staff | null;
 }

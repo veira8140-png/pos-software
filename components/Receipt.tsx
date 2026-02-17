@@ -9,8 +9,9 @@ interface ReceiptProps {
 
 const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
   const dateStr = new Date(sale.timestamp).toLocaleString('en-KE');
+  // Dynamic QR code URL based on the unique E-TIMS control number
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(sale.etimsControlNumber)}`;
 
-  // Styles defined here for thermal printing consistency
   const containerStyle: React.CSSProperties = {
     fontFamily: 'Courier, monospace',
     width: '100%',
@@ -19,7 +20,8 @@ const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
     padding: '10px',
     color: '#000',
     fontSize: '12px',
-    lineHeight: '1.2'
+    lineHeight: '1.2',
+    position: 'relative'
   };
 
   const headerStyle: React.CSSProperties = {
@@ -32,8 +34,25 @@ const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
     margin: '8px 0'
   };
 
+  const voidOverlay: React.CSSProperties = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) rotate(-45deg)',
+    border: '4px solid red',
+    color: 'red',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    padding: '10px',
+    opacity: 0.3,
+    pointerEvents: 'none',
+    zIndex: 10
+  };
+
   return (
     <div style={containerStyle}>
+      {sale.status === 'voided' && <div style={voidOverlay}>VOIDED</div>}
+      
       <div style={headerStyle}>
         <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>{business.name.toUpperCase()}</div>
         <div style={{ fontSize: '10px' }}>{business.address}</div>
@@ -80,13 +99,22 @@ const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
       <div style={dividerStyle} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px' }}>
-        <span>SUBTOTAL:</span>
-        <span>{(sale.total - sale.tax).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+        <span>GROSS TOTAL:</span>
+        <span>{sale.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
       </div>
+      
+      {sale.discount > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#000' }}>
+          <span>DISCOUNT:</span>
+          <span>-{sale.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+        </div>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px' }}>
         <span>VAT (16%):</span>
         <span>{sale.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
       </div>
+      
       <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '14px', marginTop: '4px' }}>
         <span>TOTAL:</span>
         <span>KES {sale.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
@@ -99,13 +127,31 @@ const Receipt: React.FC<ReceiptProps> = ({ sale, business }) => {
           <span>METHOD:</span>
           <span>{sale.paymentMethod.toUpperCase()}</span>
         </div>
+        
+        {sale.paymentMethod === 'Split' && sale.paymentDetails && (
+          <div style={{ fontSize: '9px', marginLeft: '10px', color: '#333' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span> - CASH:</span>
+              <span>{sale.paymentDetails.cash.toLocaleString()}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span> - M-PESA:</span>
+              <span>{sale.paymentDetails.mpesa.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
         <div style={{ marginTop: '10px', fontWeight: 'bold' }}>E-TIMS CTRL:</div>
         <div style={{ fontSize: '9px', wordBreak: 'break-all' }}>{sale.etimsControlNumber}</div>
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '10px' }}>
-        <div style={{ width: '100px', height: '100px', margin: '0 auto 10px', border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: '8px' }}>E-TIMS QR CODE</span>
+        <div style={{ width: '100px', height: '100px', margin: '0 auto 10px', border: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <img 
+            src={qrCodeUrl} 
+            alt="E-TIMS QR Code" 
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
         </div>
         <div style={{ fontWeight: 'bold' }}>THANK YOU FOR SHOPPING!</div>
         <div style={{ fontSize: '8px', color: '#666' }}>Powered by Veira POS</div>
