@@ -6,43 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veira POS - Retail Simplified</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { 
+          font-family: 'Plus Jakarta Sans', sans-serif; 
+          -webkit-font-smoothing: antialiased;
+        }
         
-        /* Default: Hide print-only elements on screen */
-        .print-only { display: none; }
+        /* 3D Soft Shadow Utility */
+        .shadow-3d {
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .shadow-3d-hover:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
+        }
 
+        /* Printing Engine */
         @media print {
-            /* Force hide all standard UI */
-            .no-print, 
-            .no-print *,
-            #root > div:not(.print-only) { 
-                display: none !important; 
-                height: 0 !important;
-                overflow: hidden !important;
+            body * {
+                visibility: hidden !important;
             }
-            
-            /* Force show print-only elements */
-            .print-only,
-            .print-only * { 
-                display: block !important; 
+            .print-only, .print-only * {
+                visibility: visible !important;
             }
-
-            /* Reset page/body for thermal printing */
-            html, body {
-                height: auto;
-                background-color: white !important;
+            .print-only {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                display: block !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 100%;
             }
-
+            /* Remove standard browser headers/footers */
             @page {
                 margin: 0;
                 size: auto;
             }
         }
+
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 <script type="importmap">
 {
@@ -56,7 +63,7 @@
 }
 </script>
 </head>
-<body class="bg-gray-50 text-slate-900">
+<body class="bg-[#F8F9FC] text-[#1A1C1E]">
     <div id="root"></div>
 </body>
 </html>
