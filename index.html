@@ -33,17 +33,31 @@
 
         @media print {
             @page {
-                margin: 0; /* This removes the browser's default header (title/date) and footer */
+                margin: 0;
             }
-            body * { visibility: hidden !important; }
-            #print-section, #print-section * { visibility: visible !important; }
+            body { 
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print { display: none !important; }
+            #root { visibility: hidden !important; }
             #print-section { 
                 display: block !important; 
+                visibility: visible !important;
                 position: absolute; 
                 left: 0; 
                 top: 0; 
                 width: 100%; 
-                padding: 20px; /* Add some padding since margins are removed */
+                margin: 0;
+                padding: 20px;
+            }
+            #print-section * { 
+                visibility: visible !important; 
+            }
+            .receipt-container {
+                background-color: white !important;
+                color: black !important;
             }
         }
 
@@ -72,8 +86,10 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
